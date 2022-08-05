@@ -4,6 +4,7 @@ import * as Location from "expo-location";
 import * as TaskManager from "expo-task-manager";
 import MapView, { Marker, Polyline } from "react-native-maps";
 import { globalStyles } from "./GlobalStyles.js";
+import { test, changeColor } from "./App.js";
 
 const LOCATION_TRACKING = "location-tracking";
 function UserLocation() {
@@ -32,8 +33,9 @@ function UserLocation() {
     };
     config();
   }, []);
+
   const startLocation = () => {
-    console.log("SÅ ER DER TRYKKET PÅ KNAPPEN");
+    console.log("THE BUTTON HAS BEEN PRESSED");
     startLocationTracking();
   };
   const stopLocation = () => {
@@ -56,7 +58,8 @@ function UserLocation() {
       longitude: 2.3361663,
     },
   ]);
-  // ------------------------------------------------------------
+
+  // -----------------------------------------
 
   TaskManager.defineTask(LOCATION_TRACKING, async ({ data, error }) => {
     if (error) {
@@ -68,8 +71,16 @@ function UserLocation() {
       let lat = locations[0].coords.latitude;
       let long = locations[0].coords.longitude;
       console.log(`${new Date(Date.now()).toLocaleString()}: ${lat},${long}`);
+
+      if (lat > 0) {
+        console.log("lat is above equator");
+      } else {
+        console.log("lat is below equator");
+        // a start could be to make a marker a different color when location is below equator, but SetState cant be called from here to the App.js file.
+      }
     }
   });
+
   // ------------------------------------------------------------
 
   return (
