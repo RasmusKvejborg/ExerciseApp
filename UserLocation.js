@@ -35,7 +35,6 @@ function UserLocation() {
   }, []);
 
   const startLocation = () => {
-    console.log("THE BUTTON HAS BEEN PRESSED");
     startLocationTracking();
   };
   const stopLocation = () => {
@@ -47,19 +46,26 @@ function UserLocation() {
     });
   };
 
-  //-------------------------------------------------------------
-  const [coordinates] = useState([
+  // --------------test coordinates to be used later---------------------------
+
+  const [cdnates, setCdnates] = useState([
     {
-      latitude: 45.78825,
-      longitude: 9.4324,
-    },
-    {
-      latitude: 30,
-      longitude: 2.3361663,
+      latitude: 45.78825, // Random latitude. Should be initial location instead
+      longitude: 9.4324, // Random longitude. Should be initial location instead
     },
   ]);
 
-  // -----------------------------------------
+  const newCdnates = () => {
+    // appends the new locations coordinates to the array.
+    setCdnates((prevCdnates) => [
+      ...prevCdnates,
+      {
+        latitude: 0.5, // Random latitude. Should be new location instead
+        longitude: 0.8, // Random longitude. Should be new location instead
+      },
+    ]);
+  };
+  // ----------------------------
 
   TaskManager.defineTask(LOCATION_TRACKING, async ({ data, error }) => {
     if (error) {
@@ -72,19 +78,14 @@ function UserLocation() {
       let long = locations[0].coords.longitude;
       console.log(`${new Date(Date.now()).toLocaleString()}: ${lat},${long}`);
 
-      if (lat > 0) {
-        console.log("lat is above equator");
-      } else {
-        console.log("lat is below equator");
-        // a start could be to make a marker a different color when location is below equator, but SetState cant be called from here to the App.js file.
-      }
+      console.log("Coordinates are: ", cdnates); // prints the test coordinates
     }
   });
 
   // ------------------------------------------------------------
 
   return (
-    <View>
+    <View style={globalStyles.btnParent}>
       {locationStarted ? (
         <TouchableOpacity onPress={stopLocation}>
           <Text style={globalStyles.btnText}>Stop Tracking</Text>
@@ -94,6 +95,11 @@ function UserLocation() {
           <Text style={globalStyles.btnText}>Start Tracking</Text>
         </TouchableOpacity>
       )}
+
+      {/*test button that calls setCdnates */}
+      <TouchableOpacity onPress={newCdnates}>
+        <Text style={globalStyles.btnText}>test button</Text>
+      </TouchableOpacity>
     </View>
   );
 }

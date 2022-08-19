@@ -82,9 +82,10 @@ export default function App({ name, onNameChange }) {
     },
     {
       latitude: silkeborg.latitude,
-      longitude: 2.3361663,
+      longitude: 40.3361663,
     },
   ]);
+  // -----------------------------------------------------------------------------
 
   return (
     <View style={globalStyles.container}>

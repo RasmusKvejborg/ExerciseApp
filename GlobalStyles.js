@@ -12,7 +12,6 @@ export const globalStyles = StyleSheet.create({
     height: Dimensions.get("window").height,
   },
   btnText: {
-    // zIndex: 1, // slet igen
     fontSize: 20,
     backgroundColor: "green",
     color: "white",
@@ -20,9 +19,11 @@ export const globalStyles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 5,
     marginBottom: 100,
-    // bottom: -70,
-    // position: "absolute",
-    // alignSelf: "center",
+  },
+  btnParent: {
+    position: "absolute",
+    bottom: -20,
+    alignSelf: "center",
   },
   test: {
     flex: 1,
