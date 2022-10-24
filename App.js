@@ -54,6 +54,8 @@ export default function App({ name, onNameChange }) {
     longitude: 0,
   });
 
+  const [coordinates, SetCoordinates] = useState([]);
+
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
@@ -70,25 +72,48 @@ export default function App({ name, onNameChange }) {
     })();
   }, []);
 
+  function callbackFunction(data) {
+    SetCoordinates((prevCdnates) => [
+      ...prevCdnates,
+      {
+        latitude: data.latitude, // Random latitude. Should be new location instead
+        longitude: data.longitude, // Random longitude. Should be new location instead
+      },
+    ]);
+  }
+
   //---------------------This is trying to make the Markers a different color when going close to them -------------------------
 
   const [color, setColor] = useState("orange");
 
-  //--------------this is only used for the red polygon in the app-----------------------
-  const [coordinates] = useState([
-    {
-      latitude: pin.latitude,
-      longitude: pin.longitude,
-    },
-    {
-      latitude: silkeborg.latitude,
-      longitude: 40.3361663,
-    },
-  ]);
-  // -----------------------------------------------------------------------------
-
   return (
     <View style={globalStyles.container}>
+      <MapView
+        style={globalStyles.map}
+        region={{
+          latitude: pin.latitude,
+          longitude: pin.longitude,
+          latitudeDelta: 0.015,
+          longitudeDelta: 0.0121,
+        }}
+        showsUserLocation={true}
+      >
+        <Marker
+          pinColor={color}
+          coordinate={pin}
+          title={"title"}
+          description={"description"}
+        />
+
+        <Polyline
+          coordinates={coordinates}
+          strokeColor="red"
+          strokeColors={["#7F0000"]}
+          strokeWidth={6}
+        />
+      </MapView>
+      <UserLocation callback={callbackFunction} />
+      {/*
       <MapView
         style={globalStyles.map}
         region={{
@@ -106,6 +131,7 @@ export default function App({ name, onNameChange }) {
           description={"description"}
         />
 
+        
         <MapView.Marker
           pinColor={color}
           coordinate={nord}
@@ -142,16 +168,9 @@ export default function App({ name, onNameChange }) {
           title={"title"}
           description={"description"}
         />
-
-        <Polyline
-          coordinates={coordinates}
-          strokeColor="red"
-          strokeColors={["#7F0000"]}
-          strokeWidth={6}
-        />
       </MapView>
+      */}
       {/*  This one opens the UserLocation.js file */}
-      <UserLocation />
     </View>
   );
 }

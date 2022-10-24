@@ -2,26 +2,30 @@ import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import * as Location from "expo-location";
 import * as TaskManager from "expo-task-manager";
-import MapView, { Marker, Polyline } from "react-native-maps";
 import { globalStyles } from "./GlobalStyles.js";
-import { test, changeColor } from "./App.js";
+import CoordinatesManager from "./CoordinatesManager";
 
 const LOCATION_TRACKING = "location-tracking";
-function UserLocation() {
-  const [locationStarted, setLocationStarted] = React.useState(false);
+
+function UserLocation(props) {
+  const [locationStarted, setLocationStarted] = useState(false);
+  const [coordindates, updateCoordinates] = CoordinatesManager();
+
   const startLocationTracking = async () => {
     await Location.startLocationUpdatesAsync(LOCATION_TRACKING, {
       accuracy: Location.Accuracy.Highest,
-      timeInterval: 10000,
-      distanceInterval: 0,
+      timeInterval: 0,
+      distanceInterval: 8,
     });
+
     const hasStarted = await Location.hasStartedLocationUpdatesAsync(
       LOCATION_TRACKING
     );
     setLocationStarted(hasStarted);
     console.log("tracking started?", hasStarted);
   };
-  React.useEffect(() => {
+
+  useEffect(() => {
     const config = async () => {
       let resf = await Location.requestForegroundPermissionsAsync();
       let resb = await Location.requestBackgroundPermissionsAsync();
@@ -37,6 +41,7 @@ function UserLocation() {
   const startLocation = () => {
     startLocationTracking();
   };
+
   const stopLocation = () => {
     setLocationStarted(false);
     TaskManager.isTaskRegisteredAsync(LOCATION_TRACKING).then((tracking) => {
@@ -46,24 +51,9 @@ function UserLocation() {
     });
   };
 
-  // --------------test coordinates to be used later---------------------------
-
-  const [cdnates, setCdnates] = useState([
-    {
-      latitude: 45.78825, // Random latitude. Should be initial location instead
-      longitude: 9.4324, // Random longitude. Should be initial location instead
-    },
-  ]);
-
-  const newCdnates = () => {
-    // appends the new locations coordinates to the array.
-    setCdnates((prevCdnates) => [
-      ...prevCdnates,
-      {
-        latitude: 0.5, // Random latitude. Should be new location instead
-        longitude: 0.8, // Random longitude. Should be new location instead
-      },
-    ]);
+  // --------------coordinates to be used for polygon---------------------------
+  const newCdnates = (data) => {
+    updateCoordinates(data);
   };
   // ----------------------------
 
@@ -72,13 +62,23 @@ function UserLocation() {
       console.log("LOCATION_TRACKING task ERROR:", error);
       return;
     }
+
     if (data) {
       const { locations } = data;
       let lat = locations[0].coords.latitude;
       let long = locations[0].coords.longitude;
-      console.log(`${new Date(Date.now()).toLocaleString()}: ${lat},${long}`);
-
-      console.log("Coordinates are: ", cdnates); // prints the test coordinates
+      let fullLocation = { latitude: lat, longitude: long };
+      // let fullCoord = `${new Date(Date.now()).toLocaleString()}: ${lat},${long}`;
+      console.log("ny location");
+      props.callback(fullLocation);
+      // console.log(getAddressFromCoordinates(lat, long));
+      {
+        // lat > 0
+        //   ? long > 0
+        //     ? console.log("Heyy")
+        //     : console.log("long er under nul")
+        //   : console.log("ja"); // få denne her ind i historikken i stedet og tildel den 2 coordinates
+      }
     }
   });
 
@@ -97,9 +97,9 @@ function UserLocation() {
       )}
 
       {/*test button that calls setCdnates */}
-      <TouchableOpacity onPress={newCdnates}>
+      {/* <TouchableOpacity onPress={newCdnates}>
         <Text style={globalStyles.btnText}>test button</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </View>
   );
 }
