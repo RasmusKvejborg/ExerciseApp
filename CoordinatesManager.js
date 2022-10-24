@@ -9,8 +9,8 @@ export default function CoordinatesManager() {
     SetCoordinates((prevCdnates) => [
       ...prevCdnates,
       {
-        latitude: data.latitude, // appends lat to the list of coordinates (it appends it to prevCdnates). 
-        longitude: data.longitude, // appends longitude to the list of coordinates. 
+        latitude: data.latitude, // appends lat to the list of coordinates (it appends it to prevCdnates).
+        longitude: data.longitude, // appends longitude to the list of coordinates.
       },
     ]);
   }

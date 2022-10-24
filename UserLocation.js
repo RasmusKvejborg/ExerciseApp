@@ -68,17 +68,8 @@ function UserLocation(props) {
       let lat = locations[0].coords.latitude;
       let long = locations[0].coords.longitude;
       let fullLocation = { latitude: lat, longitude: long };
-      // let fullCoord = `${new Date(Date.now()).toLocaleString()}: ${lat},${long}`;
-      console.log("ny location");
+      console.log("new location received");
       props.callback(fullLocation);
-      // console.log(getAddressFromCoordinates(lat, long));
-      {
-        // lat > 0
-        //   ? long > 0
-        //     ? console.log("Heyy")
-        //     : console.log("long er under nul")
-        //   : console.log("ja"); // få denne her ind i historikken i stedet og tildel den 2 coordinates
-      }
     }
   });
 
@@ -95,11 +86,6 @@ function UserLocation(props) {
           <Text style={globalStyles.btnText}>Start Tracking</Text>
         </TouchableOpacity>
       )}
-
-      {/*test button that calls setCdnates */}
-      {/* <TouchableOpacity onPress={newCdnates}>
-        <Text style={globalStyles.btnText}>test button</Text>
-      </TouchableOpacity> */}
     </View>
   );
 }

@@ -5,47 +5,6 @@ import * as Location from "expo-location";
 import UserLocation from "./UserLocation";
 import { globalStyles } from "./GlobalStyles.js";
 
-const silkeborg = {
-  latitude: 56.2639,
-  longitude: 9.5018,
-  latitudeDelta: 0.0922,
-  longitudeDelta: 0.0421,
-};
-const silkeborg2 = {
-  latitude: 56.2639,
-  longitude: 9.5018,
-};
-const midtbyen = {
-  latitude: 56.157,
-  longitude: 10.2056,
-};
-const nord = {
-  latitude: 56.1661,
-  longitude: 10.2034,
-};
-const vest = {
-  latitude: 56.1549,
-  longitude: 10.1871,
-};
-const syd = {
-  latitude: 56.1441,
-  longitude: 10.2035,
-};
-const Ø = {
-  latitude: 56.165,
-  longitude: 10.2303,
-};
-const havn = {
-  latitude: 56.1511,
-  longitude: 10.2154,
-};
-const SanFrancisco = {
-  latitude: 37.78825,
-  longitude: -122.4324,
-  latitudeDelta: 0.015,
-  longitudeDelta: 0.0121,
-};
-
 // -------------------------------------------------
 
 export default function App({ name, onNameChange }) {
@@ -76,15 +35,11 @@ export default function App({ name, onNameChange }) {
     SetCoordinates((prevCdnates) => [
       ...prevCdnates,
       {
-        latitude: data.latitude, // Random latitude. Should be new location instead
-        longitude: data.longitude, // Random longitude. Should be new location instead
+        latitude: data.latitude,
+        longitude: data.longitude,
       },
     ]);
   }
-
-  //---------------------This is trying to make the Markers a different color when going close to them -------------------------
-
-  const [color, setColor] = useState("orange");
 
   return (
     <View style={globalStyles.container}>
@@ -98,13 +53,6 @@ export default function App({ name, onNameChange }) {
         }}
         showsUserLocation={true}
       >
-        <Marker
-          pinColor={color}
-          coordinate={pin}
-          title={"title"}
-          description={"description"}
-        />
-
         <Polyline
           coordinates={coordinates}
           strokeColor="red"
@@ -113,64 +61,6 @@ export default function App({ name, onNameChange }) {
         />
       </MapView>
       <UserLocation callback={callbackFunction} />
-      {/*
-      <MapView
-        style={globalStyles.map}
-        region={{
-          latitude: pin.latitude,
-          longitude: pin.longitude,
-          latitudeDelta: 0.015,
-          longitudeDelta: 0.0121,
-        }}
-        showsUserLocation={true}
-      >
-        <MapView.Marker
-          pinColor={color}
-          coordinate={pin}
-          title={"title"}
-          description={"description"}
-        />
-
-        
-        <MapView.Marker
-          pinColor={color}
-          coordinate={nord}
-          title={"title"}
-          description={"description"}
-        />
-        <MapView.Marker
-          pinColor={color}
-          coordinate={vest}
-          title={"title"}
-          description={"description"}
-        />
-        <MapView.Marker
-          pinColor={color}
-          coordinate={syd}
-          title={"title"}
-          description={"description"}
-        />
-        <MapView.Marker
-          pinColor={color}
-          coordinate={Ø}
-          title={"title"}
-          description={"description"}
-        />
-        <MapView.Marker
-          pinColor={"green"}
-          coordinate={midtbyen}
-          title={"title"}
-          description={"description"}
-        />
-        <MapView.Marker
-          pinColor={color}
-          coordinate={havn}
-          title={"title"}
-          description={"description"}
-        />
-      </MapView>
-      */}
-      {/*  This one opens the UserLocation.js file */}
     </View>
   );
 }
