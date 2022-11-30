@@ -1,11 +1,16 @@
 {
   "cli": {
-    "version": ">= 2.1.0"
+    "version": ">= 2.6.0"
   },
   "build": {
     "development": {
-      "developmentClient": true,
-      "distribution": "internal"
+      "distribution": "internal",
+      "android": {
+        "gradleCommand": ":app:assembleDebug"
+      },
+      "ios": {
+        "buildConfiguration": "Debug"
+      }
     },
     "preview": {
       "distribution": "internal"
@@ -15,9 +20,8 @@
   "submit": {
     "production": {
       "android": {
-        "serviceAccountKeyPath": "C:/Users/Sduts/rasmus/pc-api-6068315112620216130-511-10c2867f7e18.json"
+        "serviceAccountKeyPath": "C:\\Users\\Sduts\\Documents\\Runeverstreet_billeder\\pc-api-6068315112620216130-511-6308675c84ed.json"
       }
-
     }
   }
 }

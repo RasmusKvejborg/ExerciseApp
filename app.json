@@ -1,8 +1,8 @@
 {
   "expo": {
     "name": "Run Every Street",
-    "slug": "RasmusMapApp",
-    "version": "1.0.2",
+    "slug": "RunEveryStreet",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -21,8 +21,8 @@
       "supportsTablet": true
     },
     "android": {
-      "package": "com.RasmusMapApp",
-      "versionCode": 3,
+      "package": "com.studsk.RunEveryStreet",
+      "versionCode": 2,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
@@ -33,7 +33,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "02a394d3-c8be-4ed5-bba1-41b607ae1f78"
+        "projectId": "f53be2c9-4b88-401f-a35c-ef34cb511e3e"
       }
     }
   }
