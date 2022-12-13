@@ -17,6 +17,10 @@ export default function App({ name, onNameChange }) {
 
   useEffect(() => {
     (async () => {
+      alert(
+        // this alert should run an async itself, depending on if its first timer user has opened the app
+        "Run Every Street collects location data to enable drawing of the trail you are running, even when the app is closed or not in use."
+      );
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
         console.log("Permission to access location was denied");

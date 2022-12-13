@@ -27,10 +27,6 @@ function UserLocation(props) {
 
   useEffect(() => {
     const config = async () => {
-      alert(
-        "Run Every Street collects location data to enable drawing of the trail you are running, even when the app is closed or not in use."
-      );
-
       let resf = await Location.requestForegroundPermissionsAsync();
       let resb = await Location.requestBackgroundPermissionsAsync();
       if (resf.status != "granted" && resb.status !== "granted") {
