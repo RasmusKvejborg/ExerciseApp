@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from "react";
 import MapView, { Marker, Polyline, Callout, Circle } from "react-native-maps";
-import { StyleSheet, Text, View, Dimensions, Platform } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Dimensions,
+  Platform,
+  PermissionsAndroid,
+  Alert,
+} from "react-native";
 import * as Location from "expo-location";
 import UserLocation from "./UserLocation";
 import { globalStyles } from "./GlobalStyles.js";
@@ -8,35 +16,70 @@ import { globalStyles } from "./GlobalStyles.js";
 // -------------------------------------------------
 
 export default function App({ name, onNameChange }) {
-  const [pin, setPin] = useState({
+  const [currentLocation, setCurrentLocation] = useState({
     latitude: 0,
     longitude: 0,
   });
 
-  const [coordinates, SetCoordinates] = useState([]);
+  const [coordinates, setCoordinates] = useState([]);
+
+  const [oldCoordinates, setOldCoordinates] = useState([]);
 
   useEffect(() => {
     (async () => {
-      alert(
-        // this alert should run an async itself, depending on if its first timer user has opened the app
-        "Run Every Street collects location data to enable drawing of the trail you are running, even when the app is closed or not in use."
+      const granted = await PermissionsAndroid.check(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
       );
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== "granted") {
-        console.log("Permission to access location was denied");
-        return;
-      }
-      let location = await Location.getCurrentPositionAsync({});
 
-      setPin({
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
-      });
+      if (!granted) {
+        Alert.alert(
+          "",
+          "Run Every Street collects location data to enable drawing of the trail you are running, and could be collected even when the app is closed or not in use. ALLOW ALL THE TIME to make the app run properly.",
+          [
+            { text: "Cancel", onPress: () => console.log("Cancel Pressed!") },
+            {
+              text: "OK",
+              onPress: async () => {
+                let { status } =
+                  await Location.requestForegroundPermissionsAsync();
+
+                if (status !== "granted") {
+                  console.log("Permission to access location was denied");
+                  return;
+                }
+
+                let location = await Location.getCurrentPositionAsync({});
+
+                setCurrentLocation({
+                  latitude: location.coords.latitude,
+                  longitude: location.coords.longitude,
+                });
+                config();
+              },
+            },
+          ],
+          { cancelable: false }
+        );
+      } else {
+        // if status has been granted, get current location
+        let location = await Location.getCurrentPositionAsync({});
+
+        setCurrentLocation({
+          latitude: location.coords.latitude,
+          longitude: location.coords.longitude,
+        });
+
+        setOldCoordinates([
+          { latitude: 41.73767484979501, longitude: 12.703637927770613 },
+          { latitude: 35.738562243639635, longitude: -115.701931037008762 },
+        ]);
+        // console.log("App coordinates: " + coordinates);
+      }
     })();
   }, []);
 
   function callbackFunction(data) {
-    SetCoordinates((prevCdnates) => [
+    setCoordinates((prevCdnates) => [
       ...prevCdnates,
       {
         latitude: data.latitude,
@@ -50,8 +93,8 @@ export default function App({ name, onNameChange }) {
       <MapView
         style={globalStyles.map}
         region={{
-          latitude: pin.latitude,
-          longitude: pin.longitude,
+          latitude: currentLocation.latitude,
+          longitude: currentLocation.longitude,
           latitudeDelta: 0.015,
           longitudeDelta: 0.0121,
         }}
@@ -62,6 +105,12 @@ export default function App({ name, onNameChange }) {
           strokeColor="red"
           strokeColors={["#7F0000"]}
           strokeWidth={6}
+        />
+        <Polyline
+          coordinates={oldCoordinates}
+          strokeColor="green"
+          strokeColors={["#287f00"]}
+          strokeWidth={5}
         />
       </MapView>
       <UserLocation callback={callbackFunction} />
